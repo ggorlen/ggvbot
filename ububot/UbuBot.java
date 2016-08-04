@@ -54,21 +54,32 @@ public class UbuBot {
             ioe.printStackTrace();
         }
 
+        // Select all a with href tags
         Elements links = doc.select("a[href]");
 
-        int i = 0;
+        // Array to hold valid links
         String s[] = new String[links.size()];
+
+        // Append valid links to an array
+        int i = 0;
         for (Element e : links){
+
+            // Create a candidate String using the a text and absolute href attribute
             String candidate = e.text().toString() + "\n" + e.attr("abs:href").toString();
+
+            // Check valididty of each candidate
             if (!candidate.startsWith("UbuWeb")
                     && !candidate.contains("#top")
                     //&& !candidate.startsWith("www")
                     //&& !candidate.startsWith("http")
                     && candidate.contains("ubuweb")) {
+
+                // Append a valid candidate to return array
                 s[i++] = candidate;
             }
         }
 
+        // Return valid candidates
         return s;
     }
 
@@ -77,6 +88,7 @@ public class UbuBot {
 
         String choice = null;
 
+        // Try random indexes until we have a non-null (should work on first try)
         while (true) {
             int randIndex = random.nextInt(list.size());
             choice = list.get(randIndex);
@@ -109,6 +121,8 @@ public class UbuBot {
                 //System.out.println("@" + status.getUser().getScreenName() + " - " + status.getCreatedAt());
                 //System.out.println(today);
                 if (status.getCreatedAt().toString().contains(today)) {
+
+                    // We've already tweeted today
                     return true;
                 }
             }
@@ -116,6 +130,7 @@ public class UbuBot {
             e.printStackTrace();
         }
 
+        // We haven't tweeted yet today
         return false;
     }
 
@@ -136,6 +151,7 @@ public class UbuBot {
             e.printStackTrace();
         }
 
+        // This status has already been tweeted in the past $paging entries
         return false;
     }
 
@@ -167,7 +183,7 @@ public class UbuBot {
     public static void main (String[] args) {
         UbuBot bot = new UbuBot();
 
-        if (bot.alreadyTweetedToday()) {  // todo: change to !
+        if (!bot.alreadyTweetedToday()) {
             // Make an array to store scrape results
             ArrayList<String> candidates = new ArrayList<>();
 
