@@ -1,5 +1,5 @@
-
-#Twitter bot for Golden Gate Valley Branch Library
+#GGVBot
+Twitter bot for Golden Gate Valley Branch Library
 
 URL: https://twitter.com/goldengate_sfpl
 
