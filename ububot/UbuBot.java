@@ -73,7 +73,7 @@ public class UbuBot {
                     && !candidate.contains("#top")
                     //&& !candidate.startsWith("www")
                     //&& !candidate.startsWith("http")
-                    && candidate.contains("http://www.ubu.com/sound/")) {
+                    && candidate.contains("ubu.com")) {
 
                 // Append a valid candidate to return array
                 s[i++] = candidate;
@@ -179,7 +179,7 @@ public class UbuBot {
     public void tweet(String tweet) throws TwitterException {
 
         // Update Twitter status
-        Status status = TWITTER.updateStatus(tweet);
+        //Status status = TWITTER.updateStatus(tweet);
 
         System.out.println("Tweeted: " + tweet);
     }
@@ -187,7 +187,7 @@ public class UbuBot {
     public static void main (String[] args) {
         UbuBot bot = new UbuBot();
 
-        if (!bot.alreadyTweetedToday()) {
+        if (bot.alreadyTweetedToday()) {  // todo: change to !
             // Make an array to store scrape results
             ArrayList<String> candidates = new ArrayList<>();
 
