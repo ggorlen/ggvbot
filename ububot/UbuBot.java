@@ -73,7 +73,7 @@ public class UbuBot {
                     && !candidate.contains("#top")
                     //&& !candidate.startsWith("www")
                     //&& !candidate.startsWith("http")
-                    && candidate.contains("ubuweb")) {
+                    && candidate.contains("http://www.ubu.com/sound/")) {
 
                 // Append a valid candidate to return array
                 s[i++] = candidate;
@@ -89,15 +89,18 @@ public class UbuBot {
 
         String choice = null;
 
-        // Try random indexes until we have a non-null (should work on first try)
-        while (true) {
-            int randIndex = random.nextInt(list.size());
-            choice = list.get(randIndex);
+        // Try random indexes until we have a non-null
+        if (list.size() > 0) {
+            while (true) {
+                int randIndex = random.nextInt(list.size());
+                choice = list.get(randIndex);
 
-            if (choice != null) {
-                return list.get(randIndex);
+                if (choice != null) {
+                    return list.get(randIndex);
+                }
             }
         }
+        return null;
     }
 
     public String getToday() {
