@@ -1,6 +1,6 @@
 package ububot;
 
-/* This program scrapes Golden Gate Valley Branch's calendar and tweets events */
+/* This program scrapes ubuweb and tweets a random page */
 
 import java.io.*;
 import java.text.DateFormat;
