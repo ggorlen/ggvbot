@@ -9,6 +9,6 @@ Uses jsoup 1.9.2 and twitter4j 4.0.4
 
 Todos:
 
--Post day of week for events
--Deal with events landing on January 2nd of each year
--Add check for missed days
+- Post day of week for events
+- Deal with events landing on January 2nd of each year
+- Add check for missed days
