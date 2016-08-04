@@ -22,6 +22,7 @@ import twitter4j.*;
 
 public class UbuBot {
 
+    private static final int TIMEOUT_MS = 10 * 1000;
     private static final String MY_USERNAME = "amplifiedgravel";
     private static final String[] URLs = {
             "http://www.ubu.com/sound/",
@@ -35,7 +36,7 @@ public class UbuBot {
             "http://www.ubu.com/outsiders/",
             "http://www.ubu.com/ubu/",
             "http://www.ubu.com/concept/",
-            "http://www.ubu.com/papers/",  // check these ones
+            "http://www.ubu.com/papers/",  // check these ones for special cases
     };
 
     // Access the Twitter API using the twitter4j.properties file
@@ -49,7 +50,7 @@ public class UbuBot {
         // Create a document object and scrape our URL
         Document doc = null;
         try {
-            doc = Jsoup.connect(url).timeout(10*1000).get();  // Change timeout value here
+            doc = Jsoup.connect(url).timeout(TIMEOUT_MS).get();
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
@@ -175,7 +176,7 @@ public class UbuBot {
     public void tweet(String tweet) throws TwitterException {
 
         // Update Twitter status
-        //Status status = TWITTER.updateStatus(tweet);
+        Status status = TWITTER.updateStatus(tweet);
 
         System.out.println("Tweeted: " + tweet);
     }
@@ -198,6 +199,9 @@ public class UbuBot {
             } catch(TwitterException te) {
                 te.printStackTrace();
             }
+
+            // Find and favorite mentions
+            bot.findAndFavoriteMentions();
         }
         else {
             System.out.println("Error: This bot already tweeted today.");
