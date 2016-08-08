@@ -32,8 +32,9 @@ public class AngusBot {
         // Check every line in the array against today's date
         for (int i = 0; i < file.length; i++) {
             if (file[i].startsWith(today)
-                && !isAlreadyTweeted(MY_USERNAME, file[i])) {
+                && !isAlreadyTweeted(MY_USERNAME, file[i].substring(7))) {
                 try {
+                    
                     // Tweet text substring without accompanying date
                     tweet(file[i].substring(7));
                 } catch (Exception e1) {
