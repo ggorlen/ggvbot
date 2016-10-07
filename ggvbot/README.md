@@ -3,7 +3,7 @@ Twitter bot for Golden Gate Valley Branch Library
 
 URL: https://twitter.com/goldengate_sfpl
 
-Scrapes events from the Golden Gate Valley Branch calendar located at sfpl.org and tweets upcoming events. Also queries for mentions and favorites them. Intended to be run automatically once daily when a circulation computer boots up. Contains checks to avoid duplicate Tweets and thus should be safe to run multiple times in a day.
+Scrapes events from the Golden Gate Valley Branch calendar located at sfpl.org and tweets upcoming events. Also queries for mentions and favorites them. Intended to be run automatically once daily when a circulation computer boots up. Contains checks to avoid duplicate tweets and thus should be safe to run multiple times in a day.
 
 Uses jsoup 1.9.2 and twitter4j 4.0.4
 
