@@ -13,7 +13,7 @@ import twitter4j.*;
 
 public class AngusBot {
     private static final String FILENAME = "angus maclise - year.txt";
-    private static final String MY_USERNAME = "MacLiseYEAR";
+    private static final String MY_USERNAME = "amplifiedgravel"; // Todo: Change to "MacLiseYEAR" before launch
 
     // Access the Twitter API using the twitter4j.properties file
     private static final Twitter TWITTER = TwitterFactory.getSingleton();
@@ -29,12 +29,12 @@ public class AngusBot {
         // Get today's date
         String today = getToday();
 
-        // Check every line in the array against today's date
+        // Check every item in the array against today's date
         for (int i = 0; i < file.length; i++) {
             if (file[i].startsWith(today)
                 && !isAlreadyTweeted(MY_USERNAME, file[i].substring(7))) {
                 try {
-                    
+
                     // Tweet text substring without accompanying date
                     tweet(file[i].substring(7));
                 } catch (Exception e1) {
@@ -77,7 +77,7 @@ public class AngusBot {
         try {
 
             // Grab own timeline
-            Paging paging = new Paging(1, 100);   // change paging here if year old duplicate tweets fail
+            Paging paging = new Paging(1, 7);   // change paging here if year old duplicate tweets fail
             List<Status> statuses = TWITTER.getUserTimeline(user, paging);
 
             for (Status status : statuses) {
