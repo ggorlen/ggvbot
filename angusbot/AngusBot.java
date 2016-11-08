@@ -7,81 +7,83 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
-
 import twitter4j.*;
 
 public class AngusBot {
     private static final String FILENAME = "angus maclise - year.txt";
-    private static final String MY_USERNAME = "amplifiedgravel"; // Todo: Change to "MacLiseYEAR" before launch
+    private static final String MY_USERNAME = "amplifiedgravel";
+                 // Todo: Change username to "MacLiseYEAR" before launch
 
     // Access the Twitter API using the twitter4j.properties file
     private static final Twitter TWITTER = TwitterFactory.getSingleton();
 
+    private HashMap<String, String> yearMap;
 
-    public AngusBot() { }
+    private AngusBot() { }
 
-    public void doATweet() {
+    private void doATweet() {
 
-        // Read contents of file to a String array
-        String[] file = readFile(FILENAME);
+        // Read contents of file to yearMap
+        readFile(FILENAME);
 
         // Get today's date
         String today = getToday();
 
-        // Check every item in the array against today's date
-        for (int i = 0; i < file.length; i++) {
-            if (file[i].startsWith(today)
-                && !isAlreadyTweeted(MY_USERNAME, file[i].substring(7))) {
-                try {
+        // Tweet if not already tweeted
+        if (!isAlreadyTweeted(MY_USERNAME, yearMap.get(today))) {
+            try {
 
-                    // Tweet text substring without accompanying date
-                    tweet(file[i].substring(7));
-                } catch (Exception e1) {
-                    e1.printStackTrace();
-                }
-                break;
+                // Tweet text substring without accompanying date
+                tweet(yearMap.get(today));
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
 
-    public String[] readFile(String filename) {
-        String input = "";
+    private void readFile(String filename) {
+        yearMap = new HashMap<>();
 
         // Text file resource will work in JAR
-        InputStream in = this.getClass().getClassLoader().getResourceAsStream(filename);
+        InputStream in = this.getClass().getClassLoader()
+                           .getResourceAsStream(filename);
 
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(in))) {
+        try (BufferedReader br = new BufferedReader
+                           (new InputStreamReader(in))) {
             String line;
             while ((line = br.readLine()) != null) {
-                input += line + "%";
+                String[] lineSplit = line.split("\t");
+                yearMap.put(lineSplit[0], lineSplit[1]);
             }
-        } catch (FileNotFoundException ex) {
-            System.out.println(ex.toString());
         } catch (IOException ex) {
             System.out.println(ex.toString());
         }
-        return input.split("%");
     }
 
-    public String getToday() {
+    private String getToday() {
 
-        // Get a calendar instance initialized to the current time on the computer's clock
+        // Get a calendar instance initialized to the
+        // current time on the computer's clock
         Calendar now = Calendar.getInstance();
 
-        // Return today's date
+        // Return today's date in a format that matches the hash key
         return new SimpleDateFormat("MMM dd").format(now.getTime());
     }
 
-    public boolean isAlreadyTweeted(String user, String searchTerm) {
+    private boolean isAlreadyTweeted(String user, String searchTerm) {
         try {
 
             // Grab own timeline
-            Paging paging = new Paging(1, 7);   // change paging here if year old duplicate tweets fail
+            Paging paging = new Paging(1, 7); // change paging here if
+                                              // year old duplicate tweets fail
+
             List<Status> statuses = TWITTER.getUserTimeline(user, paging);
 
             for (Status status : statuses) {
-                //System.out.println("@" + status.getUser().getScreenName() + " - " + status.getText());
+                //System.out.println("@" + status.getUser()
+                //    .getScreenName() + " - " + status.getText());
                 if (status.getText().toString().contains(searchTerm)) {
                     return true;
                 }
@@ -93,7 +95,7 @@ public class AngusBot {
         return false;
     }
 
-    public void findAndFavoriteMentions() {
+    private void findAndFavoriteMentions() {
         try {
 
             // Create list of mentions
@@ -110,12 +112,12 @@ public class AngusBot {
         }
     }
 
-    public void tweet(String tweet) throws TwitterException {
+    private void tweet(String tweet) throws TwitterException {
 
         // Update Twitter status
         Status status = TWITTER.updateStatus(tweet);
 
-        System.out.println("Tweeted: " + tweet);
+        //System.out.println("Tweeted: " + tweet);
     }
 
     public static void main (String[] args) {
