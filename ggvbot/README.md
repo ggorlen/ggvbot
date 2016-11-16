@@ -12,3 +12,4 @@ Todos:
 - Post day of week for events
 - Deal with events landing on January 2nd of each year
 - Add check for missed days
+- Add option to send an email to the bot owner when the bot has found and favorited a tweet
