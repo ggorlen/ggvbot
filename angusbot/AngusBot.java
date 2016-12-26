@@ -13,8 +13,7 @@ import twitter4j.*;
 
 public class AngusBot {
     private static final String FILENAME = "angus maclise - year.txt";
-    private static final String MY_USERNAME = "amplifiedgravel";
-                 // Todo: Change username to "MacLiseYEAR" before launch
+    private static final String MY_USERNAME = "MacLiseYEAR";
 
     // Access the Twitter API using the twitter4j.properties file
     private static final Twitter TWITTER = TwitterFactory.getSingleton();
@@ -24,34 +23,29 @@ public class AngusBot {
     private AngusBot() { }
 
     private void doATweet() {
-
         // Read contents of file to yearMap
         readFile(FILENAME);
 
         // Get today's date
         String today = getToday();
 
-        // Tweet if not already tweeted
-        if (!isAlreadyTweeted(MY_USERNAME, yearMap.get(today))) {
+        // Tweet if today's tweet is not among this account's last 3 tweets
+        if (!isAlreadyTweeted(MY_USERNAME, yearMap.get(today), 3)) {
             try {
-
-                // Tweet text substring without accompanying date
                 tweet(yearMap.get(today));
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (TwitterException te) {
+                te.printStackTrace();
             }
         }
     }
 
     private void readFile(String filename) {
         yearMap = new HashMap<>();
-
-        // Text file resource will work in JAR
         InputStream in = this.getClass().getClassLoader()
                            .getResourceAsStream(filename);
 
-        try (BufferedReader br = new BufferedReader
-                           (new InputStreamReader(in))) {
+        try (BufferedReader br = new BufferedReader(
+                          new InputStreamReader(in))) {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] lineSplit = line.split("\t");
@@ -63,7 +57,6 @@ public class AngusBot {
     }
 
     private String getToday() {
-
         // Get a calendar instance initialized to the
         // current time on the computer's clock
         Calendar now = Calendar.getInstance();
@@ -72,19 +65,18 @@ public class AngusBot {
         return new SimpleDateFormat("MMM dd").format(now.getTime());
     }
 
-    private boolean isAlreadyTweeted(String user, String searchTerm) {
+    private boolean isAlreadyTweeted(String user, String searchTerm, int time) {
         try {
-
-            // Grab own timeline
-            Paging paging = new Paging(1, 7); // change paging here if
-                                              // year old duplicate tweets fail
+            // Grab user's timeline
+            Paging paging = new Paging(1, time); // change paging here if
+                                                 // year old duplicate tweets fail
 
             List<Status> statuses = TWITTER.getUserTimeline(user, paging);
 
             for (Status status : statuses) {
                 //System.out.println("@" + status.getUser()
                 //    .getScreenName() + " - " + status.getText());
-                if (status.getText().toString().contains(searchTerm)) {
+                if (status.getText().equals(searchTerm)) {
                     return true;
                 }
             }
@@ -97,7 +89,6 @@ public class AngusBot {
 
     private void findAndFavoriteMentions() {
         try {
-
             // Create list of mentions
             List<Status> statuses = TWITTER.getMentionsTimeline();
 
@@ -117,7 +108,7 @@ public class AngusBot {
         // Update Twitter status
         Status status = TWITTER.updateStatus(tweet);
 
-        //System.out.println("Tweeted: " + tweet);
+        System.out.println("Tweeted: " + tweet);
     }
 
     public static void main (String[] args) {
