@@ -29,8 +29,8 @@ public class AngusBot {
         // Get today's date
         String today = getToday();
 
-        // Tweet if today's tweet is not among this account's last 3 tweets
-        if (!isAlreadyTweeted(MY_USERNAME, yearMap.get(today), 3)) {
+        // Tweet if today's tweet is not among this account's last 7 tweets
+        if (!isAlreadyTweeted(MY_USERNAME, yearMap.get(today), 7)) {
             try {
                 tweet(yearMap.get(today));
             } catch (TwitterException te) {
